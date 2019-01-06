@@ -14,6 +14,10 @@ namespace App
         BindingList<Reader> Readers;
         BindingList<Tag> Tags;
 
+        /**/
+        private bool mouseDown;
+        private Point lastLocation;
+
         public Form1()
         {
             InitializeComponent();
@@ -30,14 +34,44 @@ namespace App
 
             dgvReaders.DataSource = Readers;
             dgvTags.DataSource = Tags;
-
-
         }
         
 
         private void btnAgregarReader_Click(object sender, EventArgs e)
         {
             Readers.Add(new Reader() { Ip = txtIp.Text, Puerto = Int32.Parse(txtPuerto.Text) });
+        }
+
+        private void btnMinimized_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void pMenu_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDown = true;
+            lastLocation = e.Location;
+        }
+
+        private void pMenu_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                this.Location = new Point(
+                    (this.Location.X - lastLocation.X) + e.X, (this.Location.Y - lastLocation.Y) + e.Y);
+
+                this.Update();
+            }
+        }
+
+        private void pMenu_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDown = false;
         }
     }
 }
